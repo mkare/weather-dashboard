@@ -5,8 +5,8 @@ import { Unit } from '@/types/weather';
 export default function CityHeader({ unit, onToggle }: { unit: Unit; onToggle: (val: Unit) => void }) {
   return (
     <div className="flex items-center justify-between p-4 bg-slate-50 shadow-md rounded-lg gap-4 max-w-3xl mx-auto w-full">
-      <Link href="/" className="text-blue-500 hover:underline">
-        Back to home page
+      <Link href="/" className="text-primary hover:underline text-sm">
+        Back to search page
       </Link>
       <div className="flex items-center gap-4">
         <Toggle value={unit} onChange={onToggle} />
