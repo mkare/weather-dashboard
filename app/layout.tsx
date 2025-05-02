@@ -2,6 +2,8 @@ import type React from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import Providers from '../components/Providers';
 
 const inter = Inter({
@@ -28,7 +30,11 @@ export default function RootLayout({
           color: '#1e293b'
         }}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { WeatherData, ForecastResponse } from '@/types/weather';
 import { getGeoData, getCurrentWeather, getForecastData } from '@/lib/weatherApi';
-import Header from '@/components/Header';
 import CityContent from '@/components/city/CityContent';
 
 interface CityPageProps {
@@ -35,7 +34,6 @@ export default async function CityPage(props: CityPageProps) {
 
   return (
     <>
-      <Header />
       {lat && lon && forecastData && forecastData.cod === '200' ? (
         <CityContent weatherData={weatherData} forecastList={forecastData.list} />
       ) : (
