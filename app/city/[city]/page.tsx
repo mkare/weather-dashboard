@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { WeatherData, ForecastResponse } from '@/types/weather';
-import { getGeoData, getCurrentWeather, getForecastData } from '@/app/api/weather/route';
+import { getGeoData, getCurrentWeather, getForecastData } from '@/lib/weatherApi';
 import Header from '@/components/Header';
 import CityContent from '@/components/city/CityContent';
 
