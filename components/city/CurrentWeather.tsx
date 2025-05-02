@@ -20,7 +20,7 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
   }, [unit]);
   return (
     <>
-      <div className="mt-2 bg-slate-50 rounded-lg p-6 text-primary w-full shadow-lg">
+      <div className="bg-slate-50 rounded-lg p-6 text-primary w-full shadow-lg">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex-1 text-center sm:text-left">
             <div className="flex flex-col">
@@ -83,16 +83,16 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
           {data.wind.gust && <p className="text-sm text-slate-700">Gust: {data.wind.gust} m/s</p>}
         </WeatherStatCard>
         <WeatherStatCard
-          title="Visibility"
-          icon="/weather-icons/clouds.svg"
-          iconAlt="Cloud Icon"
-          value={<>{data.clouds.all}%</>}
-        />
-        <WeatherStatCard
           title="Cloudiness"
           icon="/weather-icons/clouds.svg"
           iconAlt="Clouds Icon"
           value={<>{data.visibility / 1000} km</>}
+        />
+        <WeatherStatCard
+          title="Visibility"
+          icon="/weather-icons/eye.svg"
+          iconAlt="Cloud Icon"
+          value={<>{data.clouds.all}%</>}
         />
       </div>
     </>
