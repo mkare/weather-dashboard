@@ -20,7 +20,7 @@ const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props)
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex-1 text-center sm:text-left">
           <div className="flex flex-col">
-            <span className="flex justify-baseline align-baseline text-5xl font-bold">
+            <span className="flex justify-center sm:justify-start align-baseline text-5xl font-bold">
               {weatherData.main.temp.toFixed(1)}
               <span className="text-3xl mr-1">°</span>
               <span className="text-2xl">{unit === 'metric' ? 'C' : 'F'}</span>
@@ -55,7 +55,7 @@ const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props)
           <span className="text-lg font-semibold">{weatherData.weather[0].description}</span>
         </div>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-4">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <InfoCard title="Humidity">
           <Image
             src="/weather-icons/humidity.svg"
@@ -112,7 +112,7 @@ const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props)
           />
           <p className="text-xl">{(weatherData.visibility / 1000).toFixed(1)} km</p>
         </InfoCard>
-        <InfoCard title="Sunrise / Sunset" className="col-span-2">
+        <InfoCard title="Sunrise / Sunset" className="sm:col-span-2">
           <p className="text-xl flex align-middle mt-1">
             <Image
               src="/weather-icons/sunrise.svg"
@@ -136,7 +136,7 @@ const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props)
             </span>
           </p>
         </InfoCard>
-        <div className="col-span-2 flex justify-end">
+        <div className="sm:col-span-2 flex justify-end">
           <Link href={`/city/${slugify(city)}`} className="hover:underline text-primary font-semibold mt-2">
             View More Details
           </Link>

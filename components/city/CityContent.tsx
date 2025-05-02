@@ -28,7 +28,7 @@ export default function CityContent({ weatherData, forecastList }: CityContentPr
   };
 
   return (
-    <main className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4">
+    <main className="flex flex-col gap-3 sm:gap-8 w-full max-w-3xl mx-auto p-4">
       <CityHeader unit={unit} onToggle={handleToggle} />
       {weatherData && weatherData.cod === 200 && <CurrentWeather data={weatherData} unit={unit} />}
       {forecastList && <DailyChart data={forecastList} />}

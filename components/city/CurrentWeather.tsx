@@ -1,14 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { Unit, WeatherData } from '@/types/weather';
-import {
-  getWeatherIcon,
-  msToKmh,
-  msToMph,
-  celsiusToFahrenheit,
-  metersToKm,
-  metersToMiles
-} from '@/lib/weatherHelpers';
+import { getWeatherIcon, msToKmh, msToMph, celsiusToFahrenheit, metersToKm, metersToMiles } from '@/lib/weatherHelpers';
 import WeatherStatCard from './WeatherStatCard';
 
 interface CurrentWeatherProps {
@@ -77,7 +70,7 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex-1 text-center sm:text-left">
             <div className="flex flex-col">
-              <span className="flex justify-baseline align-baseline text-5xl font-bold">
+              <span className="flex justify-center sm:justify-start align-baseline text-5xl font-bold">
                 {displayTemp}
                 <span className="text-3xl mr-1">°</span>
                 <span className="text-2xl">{tempUnit}</span>
@@ -113,7 +106,7 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <WeatherStatCard
           title="Humidity"
           icon="/weather-icons/humidity.svg"
