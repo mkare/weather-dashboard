@@ -1,7 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { Unit, WeatherData } from '@/types/weather';
-import { getWeatherIcon, msToKmh, msToMph } from '@/lib/weatherHelpers';
+import {
+  getWeatherIcon,
+  msToKmh,
+  msToMph,
+  celsiusToFahrenheit,
+  metersToKm,
+  metersToMiles
+} from '@/lib/weatherHelpers';
 import WeatherStatCard from './WeatherStatCard';
 
 interface CurrentWeatherProps {
@@ -18,6 +25,52 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
       localStorage.setItem('unit', 'metric');
     }
   }, [unit]);
+
+  const {
+    displayTemp,
+    displayMinMax,
+    displayFeelsLike,
+    tempUnit,
+    windSpeed,
+    windSpeedUnit,
+    windSpeedConverted,
+    visibilityValue,
+    visibilityUnit,
+    cloudiness
+  } = useMemo(() => {
+    const isMetric = unit === 'metric';
+    const temp = isMetric ? data.main.temp : Number(celsiusToFahrenheit(data.main.temp));
+    const min = isMetric ? data.main.temp_min : Number(celsiusToFahrenheit(data.main.temp_min));
+    const max = isMetric ? data.main.temp_max : Number(celsiusToFahrenheit(data.main.temp_max));
+    const feelsLike = isMetric ? data.main.feels_like : Number(celsiusToFahrenheit(data.main.feels_like));
+    const tempUnit = isMetric ? 'C' : 'F';
+    const windSpeed = isMetric ? data.wind.speed : data.wind.speed;
+    const windSpeedUnit = isMetric ? 'm/s' : 'mph';
+    const windSpeedConverted = isMetric ? `${msToKmh(data.wind.speed)} km/h` : `${msToMph(data.wind.speed)} mph`;
+    let visibilityValue: string;
+    let visibilityUnit: string;
+    if (isMetric) {
+      visibilityValue = metersToKm(data.visibility);
+      visibilityUnit = 'km';
+    } else {
+      visibilityValue = metersToMiles(data.visibility);
+      visibilityUnit = 'mi';
+    }
+    const cloudiness = data.clouds.all;
+    return {
+      displayTemp: temp.toFixed(1),
+      displayMinMax: `${min.toFixed(1)}° / ${max.toFixed(1)}°`,
+      displayFeelsLike: feelsLike.toFixed(1),
+      tempUnit,
+      windSpeed,
+      windSpeedUnit,
+      windSpeedConverted,
+      visibilityValue,
+      visibilityUnit,
+      cloudiness
+    };
+  }, [unit, data]);
+
   return (
     <>
       <div className="bg-slate-50 rounded-lg p-6 text-primary w-full shadow-lg">
@@ -25,16 +78,18 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
           <div className="flex-1 text-center sm:text-left">
             <div className="flex flex-col">
               <span className="flex justify-baseline align-baseline text-5xl font-bold">
-                {data.main.temp.toFixed(1)}
+                {displayTemp}
                 <span className="text-3xl mr-1">°</span>
-                <span className="text-2xl">{unit === 'metric' ? 'C' : 'F'}</span>
+                <span className="text-2xl">{tempUnit}</span>
               </span>
               <h2 className="text-2xl font-bold">
                 {data.name}, {data.sys.country}
               </h2>
               <p>
-                {data.main.temp_min.toFixed(1)}° / {data.main.temp_max.toFixed(1)}° Feels like{' '}
-                {data.main.feels_like.toFixed(1)}°{unit === 'metric' ? 'C' : 'F'}
+                {displayMinMax}
+                <span className="ml-2">
+                  Feels like {displayFeelsLike}°{tempUnit}
+                </span>
               </p>
               <p className="text-slate-500 text-sm">
                 {new Date().toLocaleDateString('en-US', {
@@ -66,33 +121,39 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
           value={<>{data.main.humidity}%</>}
           iconClassName="absolute right-4 top-6"
         >
-          <p className="text-sm text-slate-700">Pressure: {data.main.pressure} hPa</p>
-          {data.main.sea_level && <p className="text-sm text-slate-700">Sea Level: {data.main.sea_level} hPa</p>}
-          {data.main.grnd_level && <p className="text-sm text-slate-700">Ground Level: {data.main.grnd_level} hPa</p>}
+          <p className="text-slate-500 text-sm">Pressure: {data.main.pressure} hPa</p>
+          {data.main.sea_level && <p className="text-slate-500 text-sm">Sea Level: {data.main.sea_level} hPa</p>}
+          {data.main.grnd_level && <p className="text-slate-500 text-sm">Ground Level: {data.main.grnd_level} hPa</p>}
         </WeatherStatCard>
         <WeatherStatCard
           title="Wind Speed"
           icon="/weather-icons/wind.svg"
           iconAlt="Wind Icon"
-          value={<>{unit === 'metric' ? `${data.wind.speed} m/s` : `${data.wind.speed} mph`}</>}
+          value={
+            <>
+              {windSpeed} {windSpeedUnit}
+            </>
+          }
         >
-          <p className="text-sm text-slate-700">
-            {unit === 'metric' ? `${msToKmh(data.wind.speed)} km/h` : `${msToMph(data.wind.speed)} mph`}
-          </p>
-          <p className="text-sm text-slate-700">Direction: {data.wind.deg}°</p>
-          {data.wind.gust && <p className="text-sm text-slate-700">Gust: {data.wind.gust} m/s</p>}
+          <p className="text-slate-500 text-sm">{windSpeedConverted}</p>
+          <p className="text-slate-500 text-sm">Direction: {data.wind.deg}°</p>
+          {data.wind.gust && <p className="text-slate-500 text-sm">Gust: {data.wind.gust} m/s</p>}
         </WeatherStatCard>
         <WeatherStatCard
           title="Cloudiness"
           icon="/weather-icons/clouds.svg"
           iconAlt="Clouds Icon"
-          value={<>{data.visibility / 1000} km</>}
+          value={<>{cloudiness}%</>}
         />
         <WeatherStatCard
           title="Visibility"
           icon="/weather-icons/eye.svg"
           iconAlt="Cloud Icon"
-          value={<>{data.clouds.all}%</>}
+          value={
+            <>
+              {visibilityValue} {visibilityUnit}
+            </>
+          }
         />
       </div>
     </>

@@ -6,6 +6,14 @@ export const celsiusToFahrenheit = (celsius: number) => {
 
 export const msToMph = (ms: number) => (ms * 2.23694).toFixed(1);
 
+export const fahrenheitToCelsius = (fahrenheit: number) => {
+  return (((fahrenheit - 32) * 5) / 9).toFixed(1);
+};
+
+export const kmToMiles = (km: number) => (km / 1.609344).toFixed(1);
+export const metersToKm = (meters: number) => (meters / 1000).toFixed(1);
+export const metersToMiles = (meters: number) => (meters / 1609.344).toFixed(1);
+
 export const getWeatherIcon = (icon: string) => {
   const iconCode = icon.slice(0, -1);
   const iconType = ['03', '04', '09', '11', '13', '50'].some((prefix) => icon.startsWith(prefix))
