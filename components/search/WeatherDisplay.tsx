@@ -136,6 +136,11 @@ const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props)
             </span>
           </p>
         </InfoCard>
+        <div className="col-span-2 flex justify-end">
+          <Link href={`/city/${slugify(city)}`} className="hover:underline text-primary font-semibold mt-2">
+            View More Details
+          </Link>
+        </div>
       </div>
     </div>
   );
