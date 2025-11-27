@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { Unit, WeatherData } from '@/types/weather';

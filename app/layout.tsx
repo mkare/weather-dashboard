@@ -5,6 +5,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Providers from '../components/Providers';
+import StoreProvider from '@/components/StoreProvider'; // Doğru yolu belirtin
 
 const inter = Inter({
   subsets: ['latin'],
@@ -30,11 +31,13 @@ export default function RootLayout({
           color: '#1e293b'
         }}
       >
-        <Providers>
-          <Header />
-          {children}
-          <Footer />
-        </Providers>
+        <StoreProvider>
+          <Providers>
+            <Header />
+            {children}
+            <Footer />
+          </Providers>
+        </StoreProvider>
       </body>
     </html>
   );

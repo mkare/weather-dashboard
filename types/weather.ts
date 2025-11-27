@@ -1,4 +1,5 @@
 export type WeatherData = {
+  message: string;
   name: string;
   sys: {
     country: string;

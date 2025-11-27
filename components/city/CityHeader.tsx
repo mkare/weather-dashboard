@@ -1,15 +1,29 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Unit } from '@/types/weather';
+import LocalStorageManager from '@/lib/localstorageManager';
 
-export default function CityHeader({ unit, onToggle }: { unit: Unit; onToggle: (val: Unit) => void }) {
+export default function CityHeader() {
+  const [unit, setUnit] = useState<Unit>('metric');
+
+  useEffect(() => {
+    const stored = LocalStorageManager.getUnit();
+    if (stored) setUnit(stored);
+  }, []);
+
+  const handleToggle = (val: Unit) => {
+    setUnit(val);
+    LocalStorageManager.setUnit(val);
+  };
+
   return (
     <div className="flex items-center justify-between p-4 bg-slate-50 shadow-md rounded-lg gap-4 max-w-3xl mx-auto w-full">
       <Link href="/" className="text-primary hover:underline text-sm">
         Back to search page
       </Link>
       <div className="flex items-center gap-4">
-        <Toggle value={unit} onChange={onToggle} />
+        <Toggle value={unit} onChange={handleToggle} />
       </div>
     </div>
   );

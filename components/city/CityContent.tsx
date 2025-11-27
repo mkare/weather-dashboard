@@ -22,14 +22,14 @@ export default function CityContent({ weatherData, forecastList }: CityContentPr
     if (stored === 'metric' || stored === 'imperial') setUnit(stored);
   }, []);
 
-  const handleToggle = (val: Unit) => {
-    setUnit(val);
-    LocalStorageManager.setUnit(val);
-  };
+  // const handleToggle = (val: Unit) => {
+  //   setUnit(val);
+  //   LocalStorageManager.setUnit(val);
+  // };
 
   return (
     <main className="flex flex-col gap-3 sm:gap-8 w-full max-w-3xl mx-auto p-4">
-      <CityHeader unit={unit} onToggle={handleToggle} />
+      <CityHeader />
       {weatherData && weatherData.cod === 200 && <CurrentWeather data={weatherData} unit={unit} />}
       {forecastList && <DailyChart data={forecastList} />}
       {forecastList && <ForecastTable data={forecastList} />}
