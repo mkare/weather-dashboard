@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchWeather } from '@/lib/fetchWeather';
 import SearchInput from './SearchInput';
@@ -52,13 +52,24 @@ export default function Search() {
     if (storedUnit === 'metric' || storedUnit === 'imperial') setUnit(storedUnit);
   }, []);
 
-  const handleSearch = (cityToSearch?: string, auto = false) => {
-    const value = cityToSearch ?? city;
-    const query = typeof value === 'string' ? value.trim() : '';
-    if (!query) return;
-    setSearchCity(query);
-    setIsAutoSearch(auto);
-  };
+  const handleSearch = useCallback(
+    (cityToSearch?: string, auto = false) => {
+      const value = cityToSearch ?? city;
+      const query = typeof value === 'string' ? value.trim() : '';
+      if (!query) return;
+      setSearchCity(query);
+      setIsAutoSearch(auto);
+    },
+    [city]
+  );
+
+  const handleSetCity = useCallback((newCity: string) => {
+    setCity(newCity);
+  }, []);
+
+  const handleSetUnit = useCallback((newUnit: Unit) => {
+    setUnit(newUnit);
+  }, []);
 
   useEffect(() => {
     if (
@@ -89,16 +100,16 @@ export default function Search() {
   }, [unit]);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-4">
+    <div className="max-w-3xl mx-auto px-4 py-4">
       <SearchInput
         city={city}
-        setCity={setCity}
+        setCity={handleSetCity}
         unit={unit}
-        setUnit={setUnit}
+        setUnit={handleSetUnit}
         handleSearch={handleSearch}
         inputRef={inputRef}
       />
-      <SearchHistory history={history} setCity={setCity} handleSearch={handleSearch} />
+      <SearchHistory history={history} setCity={handleSetCity} handleSearch={handleSearch} />
       {isError && <Alert message={error?.message || 'An error occurred.'} variant="error" />}
       {isFetching && <Alert message="Loading weather data..." variant="loading" dismissible={false} />}
       {showInfo && (

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import Image from 'next/image';
 import { Unit, WeatherData } from '@/types/weather';
 import { getWeatherIcon, msToKmh, msToMph, celsiusToFahrenheit, metersToKm, metersToMiles } from '@/lib/weatherHelpers';
@@ -11,14 +11,7 @@ interface CurrentWeatherProps {
 }
 
 export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
-  useEffect(() => {
-    const storedUnit = localStorage.getItem('unit') as Unit | null;
-    if (storedUnit === 'metric' || storedUnit === 'imperial') {
-      localStorage.setItem('unit', unit);
-    } else {
-      localStorage.setItem('unit', 'metric');
-    }
-  }, [unit]);
+  // useEffect kaldırıldı - localStorage yönetimi CityClientWrapper'da
 
   const {
     displayTemp,
@@ -37,31 +30,18 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
     const min = isMetric ? data.main.temp_min : Number(celsiusToFahrenheit(data.main.temp_min));
     const max = isMetric ? data.main.temp_max : Number(celsiusToFahrenheit(data.main.temp_max));
     const feelsLike = isMetric ? data.main.feels_like : Number(celsiusToFahrenheit(data.main.feels_like));
-    const tempUnit = isMetric ? 'C' : 'F';
-    const windSpeed = isMetric ? data.wind.speed : data.wind.speed;
-    const windSpeedUnit = isMetric ? 'm/s' : 'mph';
-    const windSpeedConverted = isMetric ? `${msToKmh(data.wind.speed)} km/h` : `${msToMph(data.wind.speed)} mph`;
-    let visibilityValue: string;
-    let visibilityUnit: string;
-    if (isMetric) {
-      visibilityValue = metersToKm(data.visibility);
-      visibilityUnit = 'km';
-    } else {
-      visibilityValue = metersToMiles(data.visibility);
-      visibilityUnit = 'mi';
-    }
-    const cloudiness = data.clouds.all;
+
     return {
       displayTemp: temp.toFixed(1),
       displayMinMax: `${min.toFixed(1)}° / ${max.toFixed(1)}°`,
       displayFeelsLike: feelsLike.toFixed(1),
-      tempUnit,
-      windSpeed,
-      windSpeedUnit,
-      windSpeedConverted,
-      visibilityValue,
-      visibilityUnit,
-      cloudiness
+      tempUnit: isMetric ? 'C' : 'F',
+      windSpeed: data.wind.speed,
+      windSpeedUnit: isMetric ? 'm/s' : 'mph',
+      windSpeedConverted: isMetric ? `${msToKmh(data.wind.speed)} km/h` : `${msToMph(data.wind.speed)} mph`,
+      visibilityValue: isMetric ? metersToKm(data.visibility) : metersToMiles(data.visibility),
+      visibilityUnit: isMetric ? 'km' : 'mi',
+      cloudiness: data.clouds.all
     };
   }, [unit, data]);
 
@@ -97,7 +77,7 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
           </div>
           <div className="flex flex-col items-center">
             <Image
-              src={`${getWeatherIcon(data.weather[0].icon)}`}
+              src={getWeatherIcon(data.weather[0].icon)}
               alt={data.weather[0].description}
               width={100}
               height={100}
@@ -142,7 +122,7 @@ export default function CurrentWeather({ data, unit }: CurrentWeatherProps) {
         <WeatherStatCard
           title="Visibility"
           icon="/weather-icons/eye.svg"
-          iconAlt="Cloud Icon"
+          iconAlt="Visibility Icon"
           value={
             <>
               {visibilityValue} {visibilityUnit}

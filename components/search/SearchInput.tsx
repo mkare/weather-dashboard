@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { RefObject } from 'react';
-import ToggleUnit from './ToggleUnit';
+import ToggleUnit from '@/components/ui/ToggleUnit';
 import { Unit } from '@/types/weather';
 
 type Props = {

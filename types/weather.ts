@@ -96,7 +96,7 @@ export type ForecastListItem = {
 
 export type ForecastResponse = {
   cod: string;
-  message: number;
+  message: string;
   cnt: number;
   list: ForecastListItem[];
   city: {
@@ -107,6 +107,15 @@ export type ForecastResponse = {
     population: number;
     timezone: number;
   };
+};
+
+export type GeoDataItem = {
+  name: string;
+  local_names?: { [key: string]: string };
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
 };
 
 export type Unit = 'metric' | 'imperial';

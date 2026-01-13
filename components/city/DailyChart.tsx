@@ -60,9 +60,9 @@ export default function DailyChart({ data }: DailyChartProps) {
   }
 
   return (
-    <div className="bg-slate-50 rounded-lg shadow-lg pt-4 pb-8 w-full">
-      <h1 className="text-xl font-bold text-primary my-2 px-6">5-Day / 3-Hour Forecast</h1>
-      <div style={{ height: '300px', width: 'calc(100% - 2rem)' }} className="p-4">
+    <div className="bg-slate-50 rounded-lg shadow-lg pt-1 pb-6 w-full">
+      <h3 className="text-xl font-bold text-primary my-4 px-6">5-Day / 3-Hour Forecast</h3>
+      <div style={{ height: '300px', width: 'calc(100% - 3rem)' }} className="px-6">
         <Chart
           options={{
             data: chartData,

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { WeatherData } from '@/types/weather';
@@ -13,7 +14,7 @@ type Props = {
   isFetching: boolean;
 };
 
-const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props) => {
+const WeatherDisplay = memo(function WeatherDisplay({ city, weatherData, unit, isError, isFetching }: Props) {
   if (!weatherData || isError || isFetching) return null;
   return (
     <div className="mt-6 bg-slate-50 rounded-lg p-6 text-primary w-full shadow-lg">
@@ -112,7 +113,7 @@ const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props)
           />
           <p className="text-xl">{(weatherData.visibility / 1000).toFixed(1)} km</p>
         </InfoCard>
-        <InfoCard title="Sunrise / Sunset" className="sm:col-span-2">
+        <InfoCard title="Sunrise">
           <p className="text-xl flex align-middle mt-1">
             <Image
               src="/weather-icons/sunrise.svg"
@@ -124,14 +125,18 @@ const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props)
             <span className="mr-2 mt-1">
               {new Date(weatherData.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
+          </p>
+        </InfoCard>
+        <InfoCard title="Sunset">
+          <p className="text-xl flex align-middle mt-1">
             <Image
               src="/weather-icons/sunset.svg"
               alt="Sunset Icon"
               width={28}
               height={28}
-              className="inline-block ml-4 mr-2"
+              className="inline-block mr-2"
             />
-            <span className="mt-1">
+            <span className="mr-2 mt-1">
               {new Date(weatherData.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
           </p>
@@ -144,6 +149,6 @@ const WeatherDisplay = ({ city, weatherData, unit, isError, isFetching }: Props)
       </div>
     </div>
   );
-};
+});
 
 export default WeatherDisplay;
